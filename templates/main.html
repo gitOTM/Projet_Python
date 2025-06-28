@@ -15,15 +15,8 @@
         <select id="motif_type" name="motif_type" onchange="updateForm()">
             <option value="repetitive" selected>Forme répétitive</option>
             <option value="spiral">Spirale</option>
-            <option value="fractale">Fractale simple</option>
         </select>
 
-        <div id="fractaleOptions" style="display:none;">
-            <p><strong>Forme de la fractale :</strong></p>
-            <label><input type="radio" name="fractale_form" value="tree" checked> Arbre récursif</label><br>
-            <label><input type="radio" name="fractale_form" value="sierpinski"> Triangle de Sierpinski</label><br>
-            <label><input type="radio" name="fractale_form" value="koch"> Courbe de Koch</label>
-        </div>
 
 
         <div id="sideContainer">
@@ -62,9 +55,9 @@
             <option value="lightblue">Bleu claire</option>
             <option value="lightgreen">Vert claire</option>
         </select>
-        <!--<input type="text" id="color" name="color">-->
+        
 
-        <input type="submit" value="🎨 Générer le motif">
+        <input type="submit" value="Générer le motif ! ">
     </form>
 
     {% if errors %}

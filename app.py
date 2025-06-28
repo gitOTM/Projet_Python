@@ -10,9 +10,9 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def welcome():
+def main():
     #return "Hello, World!"
-    return render_template('welcome.html')
+    return render_template('main.html')
 
 
 
@@ -23,7 +23,7 @@ def submit():
     errors, nb_side, nb_repet, init_size, rotation_angle, color, _ = validate_inputs(request.form)
 
     if errors:
-        return render_template('welcome.html', errors=errors)
+        return render_template('main.html', errors=errors)
 
     # Génère le motif uniquement si tout est valide
     menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type, fractale_form)
@@ -31,9 +31,9 @@ def submit():
 
     if os.path.exists('static/shape.png'):
         image_url = f'static/shape.png?t={int(time.time())}'
-        return render_template('welcome.html', image_url=image_url)
+        return render_template('main.html', image_url=image_url)
     else:
-        return render_template('welcome.html', errors=["Erreur : image non générée."])
+        return render_template('main.html', errors=["Erreur : image non générée."])
 
 
 

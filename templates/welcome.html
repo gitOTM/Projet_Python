@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Motifs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Générateur de Motifs Géométriques</h1>
+
+    <form method="POST" action="/submit">
+        <label for="motif_type">Type de motif :</label>
+        <select id="motif_type" name="motif_type" onchange="updateForm()">
+            <option value="repetitive" selected>Forme répétitive</option>
+            <option value="spiral">Spirale</option>
+            <option value="fractale">Fractale simple</option>
+        </select>
+
+        <div id="fractaleOptions" style="display:none;">
+            <p><strong>Forme de la fractale :</strong></p>
+            <label><input type="radio" name="fractale_form" value="tree" checked> Arbre récursif</label><br>
+            <label><input type="radio" name="fractale_form" value="sierpinski"> Triangle de Sierpinski</label><br>
+            <label><input type="radio" name="fractale_form" value="koch"> Courbe de Koch</label>
+        </div>
+
+
+        <div id="sideContainer">
+            <label for="nb_side">Nombre de côtés</label>
+            <input type="text" id="nb_side" name="nb_side">
+        </div>
+
+        <div id="repet_or_depth_container">
+            <label for="nb_repet" id="repet_label">Nombre de répétitions</label>
+            <input type="text" id="nb_repet" name="nb_repet">
+        </div>
+
+        <label for="init_size">Taille initiale du motif</label>
+        <input type="text" id="init_size" name="init_size">
+
+        <div id="angle_container">
+            <label for="rotation_angle">Angle de rotation entre chaque répétition</label>
+            <input type="text" id="rotation_angle" name="rotation_angle">
+        </div>
+
+        <label for="color">Couleur du motif (en anglais)</label>
+        <select id="color" name="color" onchange="updateForm()">
+            <option value="black" selected>Noir</option>
+            <option value="white">Blanc</option>
+            <option value="red">Rouge</option>
+            <option value="green" >Vert</option>
+            <option value="blue">Bleu</option>
+            <option value="yellow">Jaune</option>
+            <option value="orange" >Orange</option>
+            <option value="purple">Violet</option>
+            <option value="pink">Rose</option>
+            <option value="brown" >Marron</option>
+            <option value="cyan">Cyan</option>
+            <option value="magenta">Magenta</option>
+            <option value="gray" >Gris</option>
+            <option value="lightblue">Bleu claire</option>
+            <option value="lightgreen">Vert claire</option>
+        </select>
+        <!--<input type="text" id="color" name="color">-->
+
+        <input type="submit" value="🎨 Générer le motif">
+    </form>
+
+    {% if errors %}
+        <ul class="error-list">
+            {% for err in errors %}
+                <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if image_url %}
+        <div class="image-block">
+            <h2>Motif généré :</h2>
+            <img src="{{ image_url }}" alt="Motif généré"><br>
+            <a href="{{ image_url.split('?')[0] }}" download="motif.png" class="download-button">📥 Télécharger l’image</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function updateForm() {
+        const motifType = document.getElementById("motif_type").value;
+        const repetLabel = document.getElementById("repet_label");
+        const angleContainer = document.getElementById("angle_container");
+        const sideContainer = document.getElementById("sideContainer");
+        const fractaleOptions = document.getElementById("fractaleOptions");
+
+        if (motifType === "repetitive") {
+            repetLabel.textContent = "Nombre de répétitions";
+            angleContainer.style.display = "block";
+            sideContainer.style.display = "block";
+            fractaleOptions.style.display = "none";
+        } else if (motifType === "fractale") {
+            repetLabel.textContent = "Profondeur";
+            angleContainer.style.display = "none";
+            sideContainer.style.display = "none";
+            fractaleOptions.style.display = "block";
+        } else {
+            repetLabel.textContent = "Profondeur";
+            angleContainer.style.display = "none";
+            sideContainer.style.display = "block";
+            fractaleOptions.style.display = "none";
+        }
+    }
+
+    window.onload = updateForm;
+</script>
+</body>
+</html>

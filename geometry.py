@@ -15,7 +15,7 @@ def prepare_turtle(color: str):
     root = tk.Tk() 
     root.overrideredirect(True) 
     canvas = ScrolledCanvas(root) 
-    canvas.config(width=600, height=600) e 
+    canvas.config(width=600, height=600)  
     canvas.pack() 
     t = RawTurtle(canvas) 
     t.hideturtle() 

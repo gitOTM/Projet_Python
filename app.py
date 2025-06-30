@@ -17,18 +17,7 @@ def submit():
     motif_type = request.form.get("motif_type", "repetitive")
 
     if motif_type == "random":
-        # génération aléatoire
-        motif_type = random.choice(["repetitive", "spiral"])
-        nb_side = random.randint(3, 8)
-        nb_repet = random.randint(5, 20)
-        init_size = random.uniform(20, 150)
-        rotation_angle = random.uniform(5, 45)
-        color = random.choice([
-            "black", "white", "red", "green", "blue", "yellow", "orange",
-            "purple", "pink", "brown", "cyan", "magenta", "gray", "lightblue", "lightgreen"
-        ])
-        print(f"[RANDOM] motif_type={motif_type}, sides={nb_side}, rep={nb_repet}, size={init_size}, angle={rotation_angle}, color={color}")
-        menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
+        motif_random()
 
     else:
         errors, nb_side, nb_repet, init_size, rotation_angle, color, _ = validate_inputs(request.form)

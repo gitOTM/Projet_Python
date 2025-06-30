@@ -1,6 +1,5 @@
 import os
 import time
-import random
 from flask import Flask, render_template, request
 from geometry import *
 
@@ -17,15 +16,14 @@ def submit():
     motif_type = request.form.get("motif_type", "repetitive")
 
     if motif_type == "random":
-        motif_random()
-
+        # on passe des valeurs vides/0 car motif_random les générera
+        menu_generate(0, 0, 0, 0, "", motif_type)
     else:
         errors, nb_side, nb_repet, init_size, rotation_angle, color, _ = validate_inputs(request.form)
 
         if errors:
             return render_template('main.html', errors=errors)
 
-        # Génère le motif uniquement si tout est valide
         menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
 
     if os.path.exists('static/shape.png'):

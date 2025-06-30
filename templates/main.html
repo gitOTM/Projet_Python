@@ -15,9 +15,8 @@
         <select id="motif_type" name="motif_type" onchange="updateForm()">
             <option value="repetitive" selected>Forme répétitive</option>
             <option value="spiral">Spirale</option>
+            <option value="random">Aléatoire</option>
         </select>
-
-
 
         <div id="sideContainer">
             <label for="nb_side">Nombre de côtés</label>
@@ -38,26 +37,25 @@
         </div>
 
         <label for="color">Couleur du motif (en anglais)</label>
-        <select id="color" name="color" onchange="updateForm()">
+        <select id="color" name="color">
             <option value="black" selected>Noir</option>
             <option value="white">Blanc</option>
             <option value="red">Rouge</option>
-            <option value="green" >Vert</option>
+            <option value="green">Vert</option>
             <option value="blue">Bleu</option>
             <option value="yellow">Jaune</option>
-            <option value="orange" >Orange</option>
+            <option value="orange">Orange</option>
             <option value="purple">Violet</option>
             <option value="pink">Rose</option>
-            <option value="brown" >Marron</option>
+            <option value="brown">Marron</option>
             <option value="cyan">Cyan</option>
             <option value="magenta">Magenta</option>
-            <option value="gray" >Gris</option>
-            <option value="lightblue">Bleu claire</option>
-            <option value="lightgreen">Vert claire</option>
+            <option value="gray">Gris</option>
+            <option value="lightblue">Bleu clair</option>
+            <option value="lightgreen">Vert clair</option>
         </select>
-        
 
-        <input type="submit" value="Générer le motif ! ">
+        <input type="submit" value="Générer le motif !">
     </form>
 
     {% if errors %}
@@ -83,23 +81,22 @@
         const repetLabel = document.getElementById("repet_label");
         const angleContainer = document.getElementById("angle_container");
         const sideContainer = document.getElementById("sideContainer");
-        const fractaleOptions = document.getElementById("fractaleOptions");
 
         if (motifType === "repetitive") {
             repetLabel.textContent = "Nombre de répétitions";
             angleContainer.style.display = "block";
             sideContainer.style.display = "block";
-            fractaleOptions.style.display = "none";
-        } else if (motifType === "fractale") {
-            repetLabel.textContent = "Profondeur";
-            angleContainer.style.display = "none";
-            sideContainer.style.display = "none";
-            fractaleOptions.style.display = "block";
-        } else {
+        } else if (motifType === "spiral") {
             repetLabel.textContent = "Profondeur";
             angleContainer.style.display = "none";
             sideContainer.style.display = "block";
-            fractaleOptions.style.display = "none";
+        } else if (motifType === "random") {
+            repetLabel.textContent = "Paramètres aléatoires";
+            angleContainer.style.display = "none";
+            sideContainer.style.display = "none";
+            document.getElementById("nb_repet").style.display = "none";
+            document.getElementById("init_size").style.display = "none";
+            document.getElementById("color").style.display = "none";
         }
     }
 

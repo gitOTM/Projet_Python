@@ -3,40 +3,58 @@ import time
 from flask import Flask, render_template, request
 from geometry import *
 
+# Instanciation de l'application Flask
 app = Flask(__name__)
-
 
 @app.route('/')
 def main():
+    
+    # Route principale de l'application.
+    # Affiche simplement la page HTML de base avec le formulaire.
+    
     return render_template('main.html')
-
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    
+    # Route qui gère la soumission du formulaire.
+    # Récupère les paramètres envoyés par l'utilisateur et appelle
+    # la génération de motif correspondante.
+    
     motif_type = request.form.get("motif_type", "repetitive")
 
     if motif_type == "random":
-        # on passe des valeurs vides/0 car motif_random les générera
+        # génération aléatoire complète (pas besoin de paramètres)
         menu_generate(0, 0, 0, 0, "", motif_type)
     else:
+        # validation des champs saisis dans le formulaire
         errors, nb_side, nb_repet, init_size, rotation_angle, color, _ = validate_inputs(request.form)
 
         if errors:
+            # en cas d'erreurs, on réaffiche la page avec les messages
             return render_template('main.html', errors=errors)
 
+        # génération classique si pas d'erreur
         menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
 
+    # on vérifie si l'image générée existe bien
     if os.path.exists('static/shape.png'):
+        # ajout d'un timestamp unique pour éviter le cache navigateur
         image_url = f'static/shape.png?t={int(time.time())}'
         return render_template('main.html', image_url=image_url)
     else:
         return render_template('main.html', errors=["Erreur : image non générée."])
 
-
 def validate_inputs(data):
+    
+    # Vérifie la validité des champs du formulaire (types, bornes, etc.)
+    # Renvoie :
+    #     - une liste d'erreurs éventuelles
+    #     - et les valeurs converties sous forme de variables prêtes à l'emploi
+    
     errors = []
 
-    # Initialisation par défaut
+    # initialisation
     sides = depth = angle = size = None
     color = data.get("color", "")
     motif_type = data.get("motif_type", "repetitive")
@@ -62,6 +80,7 @@ def validate_inputs(data):
     except ValueError:
         errors.append("La taille initiale doit être un nombre.")
 
+    # l'angle ne s'applique qu'aux formes répétitives
     if motif_type == "repetitive":
         try:
             angle = float(data.get("rotation_angle", -1))

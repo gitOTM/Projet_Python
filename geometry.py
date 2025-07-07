@@ -79,16 +79,38 @@ def spirale(nb_side: int, profondeur: int, init_size: int, color: str):
 
 def motif_random():
     import random
-    motif_type = random.choice(["repetitive", "spiral"])
-    nb_side = random.randint(3, 8)
-    nb_repet = random.randint(5, 20)
-    init_size = random.uniform(20, 150)
-    rotation_angle = random.uniform(5, 45)
-    color = random.choice([
-        "black", "white", "red", "green", "blue", "yellow", "orange",
-        "purple", "pink", "brown", "cyan", "magenta", "gray", "lightblue", "lightgreen"
-    ])
-    print(f"[RANDOM] motif_type={motif_type}, sides={nb_side}, rep={nb_repet}, size={init_size}, angle={rotation_angle}, color={color}")
-    menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
 
+    # choisir le type de motif
+    motif_type = random.choices(
+        ["repetitive", "spiral"],
+        weights=[0.6, 0.4]
+    )[0]
+
+    # nombre de côtés : 70% entre 3–6, 30% entre 7–12
+    if random.random() < 0.7:
+        nb_side = random.randint(3, 6)
+    else:
+        nb_side = random.randint(7, 12)
+
+    # répétitions / profondeur
+    nb_repet = random.randint(5, 15)
+
+    # taille
+    init_size = random.uniform(20, 200)
+
+    # angle plus varié
+    rotation_angle = random.uniform(1, 90)
+
+    # thème de couleur
+    color_theme = random.choice([
+        ["black", "white", "gray"],
+        ["red", "orange", "yellow"],
+        ["green", "lightgreen", "cyan"],
+        ["blue", "lightblue", "purple"],
+        ["pink", "magenta", "brown"]
+    ])
+    color = random.choice(color_theme)
+
+    print(f"[RANDOM] motif_type={motif_type}, sides={nb_side}, rep={nb_repet}, size={init_size:.1f}, angle={rotation_angle:.1f}, color={color}")
+    return menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
 

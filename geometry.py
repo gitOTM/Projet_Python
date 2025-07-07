@@ -3,8 +3,22 @@ import tkinter as tk
 from turtle import RawTurtle, ScrolledCanvas
 import math
 
+def menu_generate(
+    nb_side: int,
+    nb_repet: int,
+    init_size: int,
+    rotation_angle: int,
+    color: str,
+    motif_type="repetitive"
+):
+    
+    # Fonction principale de génération de motif.
+    # Oriente vers la bonne fonction en fonction du type de motif demandé :
+    # - spiral : appelle la fonction spirale
+    # - random : appelle motif_random
+    # - repetitive (par défaut) : appelle forme_rep
+    
 
-def menu_generate(nb_side: int, nb_repet: int, init_size: int, rotation_angle: int, color: str, motif_type="repetitive"):
     if motif_type == "spiral":
         return spirale(nb_side, nb_repet, init_size, color)
     elif motif_type == "random":
@@ -13,50 +27,85 @@ def menu_generate(nb_side: int, nb_repet: int, init_size: int, rotation_angle: i
         return forme_rep(nb_side, nb_repet, init_size, rotation_angle, color)
 
 
-
 def prepare_turtle(color: str):
-    root = tk.Tk() 
-    root.overrideredirect(True) 
-    canvas = ScrolledCanvas(root) 
-    canvas.config(width=600, height=600)  
-    canvas.pack() 
-    t = RawTurtle(canvas) 
-    t.hideturtle() 
-    t.speed(0) 
-    t.color(color) 
-    t.screen.tracer(0, 0) 
+    
+    # Prépare un environnement graphique Tkinter + Turtle prêt à dessiner
+    # avec la couleur choisie et un canvas 600x600.
+    # Retourne la racine Tkinter, le canvas et la tortue RawTurtle.
+    
+    root = tk.Tk()  # fenêtre Tkinter
+    root.overrideredirect(True)  # cache la fenêtre pour l'utilisateur
+    canvas = ScrolledCanvas(root)
+    canvas.config(width=600, height=600)
+    canvas.pack()
+    t = RawTurtle(canvas)  # crée la tortue
+    t.hideturtle()
+    t.speed(0)  # vitesse maximale
+    t.color(color)
+    t.screen.tracer(0, 0)  # désactive l'animation automatique
     return root, canvas, t
 
 
 def finalize_drawing(t, canvas, root):
-    t.screen.update() 
-    canvas.update() 
-    canvas.postscript(file="static/shape.eps") 
-    t.clear() 
-    root.destroy() 
-    Image.open("static/shape.eps").save("static/shape.png") 
+    
+    # Finalise le tracé :
+    # - met à jour le canvas
+    # - exporte en EPS
+    # - convertit en PNG
+    # - détruit la fenêtre Tkinter
+    
+    t.screen.update()
+    canvas.update()
+    canvas.postscript(file="static/shape.eps")  # export vectoriel
+    t.clear()
+    root.destroy()
+    # conversion en PNG grâce à Pillow
+    Image.open("static/shape.eps").save("static/shape.png")
 
 
-def forme_rep(nb_side: int, nb_repet: int, init_size: int, rotation_angle: int, color: str):
+def forme_rep(
+    nb_side: int,
+    nb_repet: int,
+    init_size: int,
+    rotation_angle: int,
+    color: str
+):
+    
+    # Génère un motif répétitif basé sur un polygone régulier.
+    # Le motif est répété avec une rotation à chaque itération
+    # pour créer un effet de rosace/toile.
+    
     print("Début fonction forme_rep")
     root, canvas, t = prepare_turtle(color)
 
+    # position de départ légèrement sous le centre
     t.penup()
     t.goto(0, -init_size / 2)
     t.setheading(0)
     t.pendown()
 
     for _ in range(nb_repet):
+        # dessiner le polygone
         for _ in range(nb_side):
             t.forward(init_size)
             t.left(360 / nb_side)
+        # rotation du motif
         t.left(rotation_angle)
 
     finalize_drawing(t, canvas, root)
     print("Fin fonction forme_rep")
 
 
-def spirale(nb_side: int, profondeur: int, init_size: int, color: str):
+def spirale(
+    nb_side: int,
+    profondeur: int,
+    init_size: int,
+    color: str
+):
+    
+    # Génère un motif en spirale basé sur un polygone.
+    # La taille des côtés augmente progressivement à chaque répétition.
+    
     print("Début fonction spirale")
     root, canvas, t = prepare_turtle(color)
 
@@ -67,41 +116,44 @@ def spirale(nb_side: int, profondeur: int, init_size: int, color: str):
 
     length = init_size
     for i in range(profondeur):
+        # tracer le polygone courant
         for _ in range(nb_side):
             t.forward(length)
             t.left(360 / nb_side)
-        length *= 1.1  
-        t.left(5)      
+        # agrandit la taille des côtés pour la spirale
+        length *= 1.1
+        # légère rotation pour accentuer la spirale
+        t.left(5)
 
     finalize_drawing(t, canvas, root)
     print("Fin fonction spirale")
 
 
 def motif_random():
+    
+    # Génère un motif de manière aléatoire :
+    # - choisit le type de motif
+    # - choisit des paramètres aléatoires
+    # - puis appelle menu_generate
+    
     import random
 
-    # choisir le type de motif
+    # type de motif avec probabilité
     motif_type = random.choices(
         ["repetitive", "spiral"],
         weights=[0.6, 0.4]
     )[0]
 
-    # nombre de côtés : 70% entre 3–6, 30% entre 7–12
+    # nombre de côtés : 70% chance entre 3–6
     if random.random() < 0.7:
         nb_side = random.randint(3, 6)
     else:
         nb_side = random.randint(7, 12)
 
-    # répétitions / profondeur
     nb_repet = random.randint(5, 15)
-
-    # taille
     init_size = random.uniform(20, 200)
-
-    # angle plus varié
     rotation_angle = random.uniform(1, 90)
 
-    # thème de couleur
     color_theme = random.choice([
         ["black", "white", "gray"],
         ["red", "orange", "yellow"],
@@ -113,4 +165,3 @@ def motif_random():
 
     print(f"[RANDOM] motif_type={motif_type}, sides={nb_side}, rep={nb_repet}, size={init_size:.1f}, angle={rotation_angle:.1f}, color={color}")
     return menu_generate(nb_side, nb_repet, init_size, rotation_angle, color, motif_type)
-

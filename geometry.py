@@ -11,14 +11,12 @@ def menu_generate(
     color: str,
     motif_type="repetitive"
 ):
-    
     # Fonction principale de génération de motif.
     # Oriente vers la bonne fonction en fonction du type de motif demandé :
     # - spiral : appelle la fonction spirale
     # - random : appelle motif_random
     # - repetitive (par défaut) : appelle forme_rep
     
-
     if motif_type == "spiral":
         return spirale(nb_side, nb_repet, init_size, color)
     elif motif_type == "random":
@@ -35,13 +33,13 @@ def prepare_turtle(color: str):
     
     root = tk.Tk()  # fenêtre Tkinter
     root.overrideredirect(True)  # cache la fenêtre pour l'utilisateur
-    canvas = ScrolledCanvas(root)
-    canvas.config(width=600, height=600)
-    canvas.pack()
+    canvas = ScrolledCanvas(root) # Crée un canvas défilable (zone de dessin) attaché à la fenêtre Tkinter
+    canvas.config(width=600, height=600) # Définit les dimensions du canvas à 600x600 pixels
+    canvas.pack() # Ajoute le canvas à la fenêtre pour qu’il s’affiche (même si on ne voit pas la fenêtre)
     t = RawTurtle(canvas)  # crée la tortue
-    t.hideturtle()
+    t.hideturtle() # cache l'icone de la tortue
     t.speed(0)  # vitesse maximale
-    t.color(color)
+    t.color(color) # aaplique la couleur
     t.screen.tracer(0, 0)  # désactive l'animation automatique
     return root, canvas, t
 
@@ -54,8 +52,8 @@ def finalize_drawing(t, canvas, root):
     # - convertit en PNG
     # - détruit la fenêtre Tkinter
     
-    t.screen.update()
-    canvas.update()
+    t.screen.update() # Rafraîchit manuellement l’écran de la tortue
+    canvas.update() # Met à jour le canvas Tkinter
     canvas.postscript(file="static/shape.eps")  # export vectoriel
     t.clear()
     root.destroy()
@@ -144,8 +142,8 @@ def motif_random():
         weights=[0.6, 0.4]
     )[0]
 
-    # nombre de côtés : 70% chance entre 3–6
-    if random.random() < 0.7:
+    # nombre de côtés : 60% de chance entre 3–6
+    if random.random() < 0.6:
         nb_side = random.randint(3, 6)
     else:
         nb_side = random.randint(7, 12)

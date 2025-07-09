@@ -15,6 +15,7 @@
         <select id="motif_type" name="motif_type" onchange="updateForm()">
             <option value="repetitive" selected>Forme répétitive</option>
             <option value="spiral">Spirale</option>
+            <option value="fractale">Fractale simple</option>
             <option value="random">Aléatoire</option>
         </select>
 
@@ -81,22 +82,38 @@
         const repetLabel = document.getElementById("repet_label");
         const angleContainer = document.getElementById("angle_container");
         const sideContainer = document.getElementById("sideContainer");
+        const repetInput = document.getElementById("nb_repet");
+        const initSizeInput = document.getElementById("init_size");
+        const colorInput = document.getElementById("color");
 
         if (motifType === "repetitive") {
             repetLabel.textContent = "Nombre de répétitions";
             angleContainer.style.display = "block";
             sideContainer.style.display = "block";
+            repetInput.style.display = "inline-block";
+            initSizeInput.style.display = "inline-block";
+            colorInput.style.display = "inline-block";
         } else if (motifType === "spiral") {
             repetLabel.textContent = "Profondeur";
             angleContainer.style.display = "none";
             sideContainer.style.display = "block";
+            repetInput.style.display = "inline-block";
+            initSizeInput.style.display = "inline-block";
+            colorInput.style.display = "inline-block";
+        } else if (motifType === "fractale") {
+            repetLabel.textContent = "Profondeur";
+            angleContainer.style.display = "none";
+            sideContainer.style.display = "none";
+            repetInput.style.display = "inline-block";
+            initSizeInput.style.display = "inline-block";
+            colorInput.style.display = "inline-block";
         } else if (motifType === "random") {
             repetLabel.textContent = "Paramètres aléatoires";
             angleContainer.style.display = "none";
             sideContainer.style.display = "none";
-            document.getElementById("nb_repet").style.display = "none";
-            document.getElementById("init_size").style.display = "none";
-            document.getElementById("color").style.display = "none";
+            repetInput.style.display = "none";
+            initSizeInput.style.display = "none";
+            colorInput.style.display = "none";
         }
     }
 
